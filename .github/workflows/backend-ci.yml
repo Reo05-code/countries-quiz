@@ -125,12 +125,17 @@ jobs:
 
       - name: Run Bundler Audit (Direct Dependencies)
         working-directory: backend
+        env:
+          HOME: ${{ github.workspace }}/tmp
         run: |
+          mkdir -p $HOME
           bundle exec bundler-audit check --update
 
       - name: Check Indirect Dependencies (Warning Only)
         working-directory: backend
         continue-on-error: true
+        env:
+          HOME: ${{ github.workspace }}/tmp
         run: |
           echo "⚠️  Checking for vulnerabilities in all dependencies (including indirect):"
           bundle exec bundler-audit check --update --verbose || echo "⚠️  Some indirect dependencies have known vulnerabilities. Consider updating them in Gemfile."
