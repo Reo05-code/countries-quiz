@@ -2,14 +2,14 @@
 
 # トランザクションですべての処理を囲む
 ActiveRecord::Base.transaction do
-  puts "データベースをクリーンアップしています..."
+  Rails.logger.debug "データベースをクリーンアップしています..."
   # 依存関係の逆順で削除する
   QuizAttempt.destroy_all
   UserFlag.destroy_all
   User.destroy_all
   Country.destroy_all
 
-  puts "国データを作成しています..."
+  Rails.logger.debug "国データを作成しています..."
   countries_data = [
     {
       name: "日本",
@@ -97,9 +97,9 @@ ActiveRecord::Base.transaction do
     Country.create!(country_data)
   end
 
-  puts "#{Country.count}個の国を作成しました"
+  Rails.logger.debug { "#{Country.count}個の国を作成しました" }
 
-  puts "ユーザーを作成しています..."
+  Rails.logger.debug "ユーザーを作成しています..."
   users_data = [
     { name: "田中太郎", email: "tanaka@example.com" },
     { name: "佐藤花子", email: "sato@example.com" },
@@ -110,9 +110,9 @@ ActiveRecord::Base.transaction do
     User.create!(user_data)
   end
 
-  puts "#{User.count}人のユーザーを作成しました"
+  Rails.logger.debug { "#{User.count}人のユーザーを作成しました" }
 
-  puts "クイズの挑戦履歴を作成しています..."
+  Rails.logger.debug "クイズの挑戦履歴を作成しています..."
 
   # .first や .second はID順とは限らないため、名前で明示的に取得する
   user1 = User.find_by!(name: "田中太郎")
@@ -151,39 +151,38 @@ ActiveRecord::Base.transaction do
     hint_level: rand(1..4)
   )
 
-  puts "#{QuizAttempt.count}件のクイズ挑戦履歴を作成しました"
+  Rails.logger.debug { "#{QuizAttempt.count}件のクイズ挑戦履歴を作成しました" }
 
-  puts "獲得した国旗を作成しています..."
+  Rails.logger.debug "獲得した国旗を作成しています..."
 
   # ユーザー1と2を取得
   [user1, user2].each do |user|
     # pluckを使ってIDの配列を直接取得（SQLクエリ1回）
     correct_country_ids = user.quiz_attempts
-      .where(correct: true)
-      .distinct
-      .pluck(:country_id)
+                              .where(correct: true)
+                              .distinct
+                              .pluck(:country_id)
 
     correct_country_ids.each do |country_id|
       UserFlag.find_or_create_by!(user: user, country_id: country_id)
     end
   end
 
-  puts "#{UserFlag.count}個の国旗を獲得しました"
-  puts "サンプルデータの作成が完了しました！"
-
-rescue => e
+  Rails.logger.debug { "#{UserFlag.count}個の国旗を獲得しました" }
+  Rails.logger.debug "サンプルデータの作成が完了しました！"
+rescue StandardError => e
   # もし途中でエラーが起きたら
-  puts "エラーが発生したため、ロールバックしました: #{e.message}"
-  puts e.backtrace.join("\n")
-end # トランザクション終了
+  Rails.logger.debug { "エラーが発生したため、ロールバックしました: #{e.message}" }
+  Rails.logger.debug e.backtrace.join("\n")
+end
 
 # -----------------------------------------------
 # トランザクションの外側で最終結果を表示
 # -----------------------------------------------
-puts "=" * 50
-puts "作成されたデータ:"
-puts "  国: #{Country.count}個"
-puts "  ユーザー: #{User.count}人"
-puts "  クイズ挑戦: #{QuizAttempt.count}件"
-puts "  獲得国旗: #{UserFlag.count}個"
-puts "=" * 50
+Rails.logger.debug "=" * 50
+Rails.logger.debug "作成されたデータ:"
+Rails.logger.debug { "  国: #{Country.count}個" }
+Rails.logger.debug { "  ユーザー: #{User.count}人" }
+Rails.logger.debug { "  クイズ挑戦: #{QuizAttempt.count}件" }
+Rails.logger.debug { "  獲得国旗: #{UserFlag.count}個" }
+Rails.logger.debug "=" * 50

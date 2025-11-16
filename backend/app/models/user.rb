@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_many :quiz_attempts, dependent: :destroy
-  has_many :user_flags, dependent: :destroy 
+  has_many :user_flags, dependent: :destroy
   has_many :countries, through: :user_flags
 
   # ユーザー名は必須

@@ -1,6 +1,7 @@
 require:
   - rubocop-rails
   - rubocop-rspec
+  - rubocop-factory_bot
 
 AllCops:
   NewCops: enable
@@ -39,14 +40,22 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'config/routes.rb'
     - 'config/environments/**/*'
+    - 'db/seeds.rb'
 
 Metrics/MethodLength:
   Max: 15
   Exclude:
     - 'spec/**/*'
 
+# Naming
+Naming/VariableNumber:
+  Enabled: false
+
 # Rails
 Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
 # RSpec
@@ -60,4 +69,7 @@ RSpec/NestedGroups:
   Max: 5
 
 Capybara/RSpec/PredicateMatcher:
+  Enabled: false
+
+FactoryBot/AssociationStyle:
   Enabled: false
