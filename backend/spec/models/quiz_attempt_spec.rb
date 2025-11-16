@@ -23,4 +23,41 @@ RSpec.describe QuizAttempt, type: :model do
     end
   end
 
+  describe '仕様に関するテスト' do
+  it '有効な属性でクイズ挑戦を作成できること' do
+    attempt = create(:quiz_attempt, correct: true, hint_level: 2)
+    expect(attempt).to be_valid
+    expect(attempt.correct).to be true
+    expect(attempt.hint_level).to eq(2)
+  end
+
+  it 'correctがnilの場合は作成できないこと' do
+    attempt = build(:quiz_attempt, correct: nil)
+    expect(attempt).not_to be_valid
+  end
+
+  it 'hint_levelが0の場合は作成できないこと' do
+    attempt = build(:quiz_attempt, hint_level: 0)
+    expect(attempt).not_to be_valid
+  end
+
+  it 'hint_levelが5の場合は作成できないこと' do
+    attempt = build(:quiz_attempt, hint_level: 5)
+    expect(attempt).not_to be_valid
+  end
+
+  it '同じユーザーが同じ国に複数回挑戦できること' do
+    user = create(:user)
+    country = create(:country)
+
+    attempt1 = create(:quiz_attempt, user: user, country: country, correct: false)
+    attempt2 = create(:quiz_attempt, user: user, country: country, correct: true)
+
+    expect(attempt1).to be_valid
+    expect(attempt2).to be_valid
+    expect(user.quiz_attempts.count).to eq(2)
+  end
+end
+
+
 end
