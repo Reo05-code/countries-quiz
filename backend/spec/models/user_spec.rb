@@ -25,4 +25,28 @@ RSpec.describe User, type: :model do
     it { should have_many(:countries).through(:user_flags) }
   end
 
+  describe 'データ作成' do
+    it '有効な属性でユーザーを作成できること' do
+    user = User.create(name: 'テストユーザー', email: 'test@example.com')
+    expect(user).to be_valid
+    expect(user.name).to eq('テストユーザー')
+  end
+
+    it '名前なしでは作成できないこと' do
+      user = build(:user, name: nil)
+      expect(user).not_to be_valid
+      expect(user.errors[:name]).to be_present
+    end
+
+    it '名前が51文字以上の場合は作成できないこと' do
+      user = build(:user, name: 'a' * 51)
+      expect(user).not_to be_valid
+    end
+  end
+
+  describe 'factory' do
+    it '有効なファクトリを持つこと' do
+      expect(build(:user)).to be_valid
+    end
+  end
 end
