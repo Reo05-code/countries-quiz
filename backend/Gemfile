@@ -3,6 +3,8 @@ source "https://rubygems.org"
 ruby "3.2.9"
 
 # Rails
+gem "cgi", "~> 0.4.1"
+gem "globalid", "~> 1.2.0"
 gem "rails", "~> 7.1.0"
 
 # Database
