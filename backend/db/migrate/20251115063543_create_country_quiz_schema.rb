@@ -30,7 +30,8 @@ class CreateCountryQuizSchema < ActiveRecord::Migration[7.1]
       t.references :country, null: false, foreign_key: true
       t.boolean :correct, null: false, default: false
       t.integer :hint_level
-      t.datetime :created_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }
+
+      t.timestamps
     end
   end
 end

@@ -163,9 +163,22 @@ ActiveRecord::Base.transaction do
                               .distinct
                               .pluck(:country_id)
 
-    correct_country_ids.each do |country_id|
-      UserFlag.find_or_create_by!(user: user, country_id: country_id)
+    # 既存のUserFlagを一度に取得
+    existing_country_ids = UserFlag.where(user: user, country_id: correct_country_ids).pluck(:country_id)
+    new_country_ids = correct_country_ids - existing_country_ids
+
+    # 新規のみ一括作成
+    next if new_country_ids.empty?
+
+    user_flags_data = new_country_ids.map do |country_id|
+      {
+        user_id: user.id,
+        country_id: country_id,
+        created_at: Time.current,
+        updated_at: Time.current
+      }
     end
+    UserFlag.insert_all(user_flags_data) # rubocop:disable Rails/SkipsModelValidations
   end
 
   Rails.logger.debug { "#{UserFlag.count}個の国旗を獲得しました" }
@@ -174,6 +187,7 @@ rescue StandardError => e
   # もし途中でエラーが起きたら
   Rails.logger.debug { "エラーが発生したため、ロールバックしました: #{e.message}" }
   Rails.logger.debug e.backtrace.join("\n")
+  raise
 end
 
 # -----------------------------------------------

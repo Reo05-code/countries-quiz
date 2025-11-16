@@ -8,9 +8,5 @@ class Country < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
   # 4つのヒントと国旗URLは必須
-  validates :hint_1, presence: true
-  validates :hint_2, presence: true
-  validates :hint_3, presence: true
-  validates :hint_4, presence: true
-  validates :flag_url, presence: true
+  validates :hint_1, :hint_2, :hint_3, :hint_4, :flag_url, presence: true
 end

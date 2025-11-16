@@ -31,7 +31,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_16_113031) do
     t.bigint "country_id", null: false
     t.boolean "correct", default: false, null: false
     t.integer "hint_level"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["country_id"], name: "index_quiz_attempts_on_country_id"
     t.index ["user_id"], name: "index_quiz_attempts_on_user_id"
   end
