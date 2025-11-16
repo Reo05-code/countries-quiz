@@ -4,6 +4,8 @@ ruby "3.2.9"
 
 # Rails
 gem "rails", "~> 7.1.0"
+gem "globalid", "~> 1.2.0"
+gem "cgi", "~> 0.4.1"
 
 # Database
 gem "pg", "~> 1.5"
