@@ -159,9 +159,9 @@ ActiveRecord::Base.transaction do
   [user1, user2].each do |user|
     # pluckを使ってIDの配列を直接取得（SQLクエリ1回）
     correct_country_ids = user.quiz_attempts
-                              .where(correct: true)
-                              .distinct
-                              .pluck(:country_id)
+    .where(correct: true)
+    .distinct
+    .pluck(:country_id)
 
     # 既存のUserFlagを一度に取得
     existing_country_ids = UserFlag.where(user: user, country_id: correct_country_ids).pluck(:country_id)
