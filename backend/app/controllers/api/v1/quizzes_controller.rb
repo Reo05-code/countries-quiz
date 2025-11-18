@@ -6,7 +6,7 @@ module Api
         return render json: { error: "Invalid quiz_id" }, status: :bad_request unless country
 
         # readingカラムとユーザーの回答を正規化して比較
-        correct_answer = normalize_to_hiragana(country.reading)
+        correct_answer = normalize_to_hiragana(country.reading.to_s)
         user_answer = normalize_to_hiragana(params[:answer].to_s)
 
         correct = (correct_answer == user_answer)
