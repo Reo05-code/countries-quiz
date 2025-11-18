@@ -9,7 +9,8 @@ require_relative "../config/environment"
 
 # 【重要】もしRailsの環境が 'production'（本番環境）だったら、
 # テストを実行すると本番DBのデータが消える危険があるため、エラーを出して即座に停止させます。
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+# Rails/Exit: Railsアプリでは abort ではなく raise を使用
+raise "The Rails environment is running in production mode!" if Rails.env.production?
 
 # RSpecでRailsのテストを行うための設定を読み込みます。
 require "rspec/rails"
@@ -28,7 +29,8 @@ begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
   # もし未実行のマイグレーションがあれば、エラーメッセージを表示してテストを停止します。
-  abort e.to_s.strip
+  # Rails/Exit: Railsアプリでは abort ではなく raise を使用
+  raise e.to_s.strip
 end
 
 # === RSpecの全体設定 ===

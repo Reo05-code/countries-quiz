@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Quizzes" do
-  describe "POST /api/v1/quizzes/check" do
+  describe "POST /api/v1/quizzes/check クイズ回答チェック" do
     let!(:country) do
       Country.create!(
         name: "日本",
@@ -14,8 +14,9 @@ RSpec.describe "Api::V1::Quizzes" do
       )
     end
 
-    context "正しい答えの場合" do
-      it "ひらがなで正解を返す" do
+    # RSpec/ContextWording: context は "when/with/without" で始める
+    context "when answer is correct" do
+      it "ひらがなの回答で正解判定される" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: country.id,
           answer: "にほん"
@@ -28,7 +29,7 @@ RSpec.describe "Api::V1::Quizzes" do
         expect(json["correct_answer"]).to eq("日本")
       end
 
-      it "カタカナで正解を返す" do
+      it "カタカナの回答で正解判定される" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: country.id,
           answer: "ニホン"
@@ -41,7 +42,7 @@ RSpec.describe "Api::V1::Quizzes" do
         expect(json["correct_answer"]).to eq("日本")
       end
 
-      it "前後の空白を無視する" do
+      it "回答の前後の空白を無視して判定する" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: country.id,
           answer: "  にほん  "
@@ -55,8 +56,8 @@ RSpec.describe "Api::V1::Quizzes" do
       end
     end
 
-    context "間違った答えの場合" do
-      it "ひらがなで不正解を返す" do
+    context "when answer is incorrect" do
+      it "誤った回答で不正解判定される" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: country.id,
           answer: "ちゅうごく"
@@ -70,10 +71,10 @@ RSpec.describe "Api::V1::Quizzes" do
       end
     end
 
-    context "無効なquiz_idの場合" do
-      it "エラーメッセージを返す" do
+    context "when quiz_id is invalid" do
+      it "無効なquiz_idでエラーメッセージを返す" do
         post "/api/v1/quizzes/check", params: {
-          quiz_id: 99999,
+          quiz_id: 99_999,
           answer: "日本"
         }
 
@@ -84,8 +85,8 @@ RSpec.describe "Api::V1::Quizzes" do
       end
     end
 
-    context "quiz_idパラメータが存在しない場合" do
-      it "エラーメッセージを返す" do
+    context "when quiz_id parameter is missing" do
+      it "quiz_idパラメータ未指定でエラーメッセージを返す" do
         post "/api/v1/quizzes/check", params: {
           answer: "日本"
         }
@@ -97,8 +98,8 @@ RSpec.describe "Api::V1::Quizzes" do
       end
     end
 
-    context "answerパラメータが存在しない場合" do
-      it "不正解を返す" do
+    context "when answer parameter is missing" do
+      it "回答パラメータ未指定で不正解判定される" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: country.id
         }
@@ -111,7 +112,7 @@ RSpec.describe "Api::V1::Quizzes" do
       end
     end
 
-    context "複数の国が存在する場合" do
+    context "when multiple countries exist" do
       let!(:germany) do
         Country.create!(
           name: "ドイツ",
@@ -124,7 +125,7 @@ RSpec.describe "Api::V1::Quizzes" do
         )
       end
 
-      it "ひらがなで正しく判定する" do
+      it "複数の国が存在する場合もひらがなで正しく判定する" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: germany.id,
           answer: "どいつ"
@@ -137,7 +138,7 @@ RSpec.describe "Api::V1::Quizzes" do
         expect(json["correct_answer"]).to eq("ドイツ")
       end
 
-      it "カタカナで正しく判定する" do
+      it "複数の国が存在する場合もカタカナで正しく判定する" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: germany.id,
           answer: "ドイツ"
@@ -150,7 +151,7 @@ RSpec.describe "Api::V1::Quizzes" do
         expect(json["correct_answer"]).to eq("ドイツ")
       end
 
-      it "異なる国の名前では不正解になる" do
+      it "異なる国の名前を回答すると不正解判定される" do
         post "/api/v1/quizzes/check", params: {
           quiz_id: germany.id,
           answer: "にほん"
