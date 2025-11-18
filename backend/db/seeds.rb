@@ -13,6 +13,7 @@ ActiveRecord::Base.transaction do
   countries_data = [
     {
       name: "日本",
+      reading: "にほん",
       hint_1: "世界で62位の面積", # 面積ランキング
       hint_2: "通貨: 円 (JPY)",
       hint_3: "首都: 東京",
@@ -21,6 +22,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "アメリカ",
+      reading: "あめりか",
       hint_1: "世界で3位の面積", # 面積ランキング
       hint_2: "通貨: 米ドル (USD)",
       hint_3: "首都: ワシントンD.C.",
@@ -29,6 +31,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "フランス",
+      reading: "ふらんす",
       hint_1: "世界で43位の面積", # 面積ランキング
       hint_2: "通貨: ユーロ (EUR)",
       hint_3: "首都: パリ",
@@ -37,6 +40,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "イタリア",
+      reading: "いたりあ",
       hint_1: "世界で72位の面積", # 面積ランキング
       hint_2: "通貨: ユーロ (EUR)",
       hint_3: "首都: ローマ",
@@ -45,6 +49,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "ブラジル",
+      reading: "ぶらじる",
       hint_1: "世界で5位の面積", # 面積ランキング
       hint_2: "通貨: レアル (BRL)",
       hint_3: "首都: ブラジリア",
@@ -53,6 +58,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "オーストラリア",
+      reading: "おーすとらりあ",
       hint_1: "世界で6位の面積", # 面積ランキング
       hint_2: "通貨: 豪ドル (AUD)",
       hint_3: "首都: キャンベラ",
@@ -61,6 +67,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "イギリス",
+      reading: "いぎりす",
       hint_1: "世界で78位の面積", # 面積ランキング
       hint_2: "通貨: ポンド (GBP)",
       hint_3: "首都: ロンドン",
@@ -69,6 +76,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "ドイツ",
+      reading: "どいつ",
       hint_1: "世界で63位の面積", # 面積ランキング
       hint_2: "通貨: ユーロ (EUR)",
       hint_3: "首都: ベルリン",
@@ -77,6 +85,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "中国",
+      reading: "ちゅうごく",
       hint_1: "世界で4位の面積", # 面積ランキング
       hint_2: "通貨: 元 (CNY)",
       hint_3: "首都: 北京",
@@ -85,6 +94,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "韓国",
+      reading: "かんこく",
       hint_1: "世界で109位の面積", # 面積ランキング
       hint_2: "通貨: ウォン (KRW)",
       hint_3: "首都: ソウル",
