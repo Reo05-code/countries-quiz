@@ -1,8 +1,8 @@
 // クイズ問題データの型定義
 export interface QuizQuestion {
   quizId: number
-  flagUrl: string
   hints: string[]
+  characterChoices: string[]
 }
 
 // クイズ回答チェックのリクエスト型
