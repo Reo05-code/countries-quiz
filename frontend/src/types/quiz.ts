@@ -1,20 +1,20 @@
 // クイズ問題データの型定義
 export interface QuizQuestion {
-  quiz_id: number
-  flag_url: string
+  quizId: number
+  flagUrl: string
   hints: string[]
 }
 
 // クイズ回答チェックのリクエスト型
 export interface QuizCheckRequest {
-  quiz_id: number
+  quizId: number
   answer: string
 }
 
 // クイズ回答チェックのレスポンス型
 export interface QuizCheckResponse {
   correct: boolean
-  correct_answer: string
+  correctAnswer: string
 }
 
 // エラーレスポンスの型
