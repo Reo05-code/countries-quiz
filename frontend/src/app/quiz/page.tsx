@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { fetchRandomQuiz, checkAnswer } from '@/lib/api/quiz'
 import type { QuizQuestion, QuizCheckResponse } from '@/types/quiz'
 
@@ -28,9 +28,18 @@ export default function QuizPage() {
 
   // ヒント表示用のstate
   const [displayedHints, setDisplayedHints] = useState<string[]>([])
+  const hintFourTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearHintFourTimer = () => {
+    if (hintFourTimerRef.current) {
+      clearTimeout(hintFourTimerRef.current)
+      hintFourTimerRef.current = null
+    }
+  }
 
   // クイズ開始処理
   const handleStartQuiz = async () => {
+    clearHintFourTimer()
     setLoading(true)
     setError(null)
     setQuiz(null)
@@ -71,6 +80,41 @@ export default function QuizPage() {
       timers.forEach(clearTimeout)
     }
   }, [quiz])
+
+  // ヒント4の表示から5秒後に自動的に失敗する
+  useEffect(() => {
+    if (!quiz || result || displayedHints.length < 4) return
+    if (hintFourTimerRef.current) return
+
+    hintFourTimerRef.current = setTimeout(async () => {
+      hintFourTimerRef.current = null
+      if (!quiz || result) return
+
+      setLoading(true)
+      try {
+        const data = await checkAnswer(quiz.quizId, '')
+        setResult(data)
+        setError('ヒント4から5秒以内に回答がなかったためタイムアウトしました。')
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'タイムアウト結果の取得に失敗しました'
+        setError(errorMessage)
+      } finally {
+        setLoading(false)
+      }
+    }, 5000)
+  }, [displayedHints.length, quiz, result])
+
+  useEffect(() => {
+    if (result) {
+      clearHintFourTimer()
+    }
+  }, [result])
+
+  useEffect(() => {
+    return () => {
+      clearHintFourTimer()
+    }
+  }, [])
 
 
   // 文字を選択肢から回答へ移動
