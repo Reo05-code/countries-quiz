@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'countries/random', to: 'countries#random'
       post 'quizzes/check', to: 'quizzes#check'
+      get 'user_flags', to: 'user_flags#index'
     end
   end
 end
