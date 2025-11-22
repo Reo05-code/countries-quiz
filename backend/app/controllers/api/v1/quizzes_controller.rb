@@ -11,9 +11,28 @@ module Api
 
         correct = (normalized_correct_answer == user_answer)
 
+        # ユーザーを取得（仮実装：最初のユーザーを使用）
+        user = User.first
+
+        # クイズ挑戦履歴を保存
+        # hint_level はフロントエンドから送られていないため、仮で 4 とする
+        # 本来はフロントエンドから現在のヒントレベルを受け取るべき
+        QuizAttempt.create!(
+          user: user,
+          country: country,
+          correct: correct,
+          hint_level: 4
+        )
+
+        if correct
+          # 正解の場合、国旗を獲得（重複チェックはモデルのバリデーションで行われるが、find_or_create_byで安全に処理）
+          UserFlag.find_or_create_by(user: user, country: country)
+        end
+
         render json: {
           correct: correct,
-          correct_answer: country.name
+          correct_answer: country.name,
+          flag_url: correct ? country.flag_url : nil
         }, status: :ok
       end
 

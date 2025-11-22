@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { fetchRandomQuiz, checkAnswer } from '@/lib/api/quiz'
 import type { QuizQuestion, QuizCheckResponse } from '@/types/quiz'
 
@@ -235,6 +236,15 @@ export default function QuizPage() {
                     <div className="text-green-600 mb-4">
                       <p className="text-6xl mb-2">⭕</p>
                       <p className="text-2xl font-bold">正解！</p>
+                      {result.flagUrl && (
+                        <div className="mt-4 mb-4 flex flex-col items-center">
+                          <p className="text-gray-600 mb-2">国旗をゲットしました！</p>
+                          <div className="w-48 shadow-lg rounded-lg overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={result.flagUrl} alt="国旗" className="w-full h-auto" />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="text-red-600 mb-4">
@@ -245,18 +255,26 @@ export default function QuizPage() {
                   <p className="text-gray-700 mb-6">
                     正解は <span className="font-bold text-2xl">{result.correctAnswer}</span> でした
                   </p>
-                  <button
-                    onClick={handleStartQuiz}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition"
-                  >
-                    次の問題へ
-                  </button>
+                  <div className="flex flex-col gap-3">
+                    <button
+                      onClick={handleStartQuiz}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition"
+                    >
+                      次の問題へ
+                    </button>
+                    <Link
+                      href="/collection"
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition"
+                    >
+                      コレクションを見る
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
           ) : (
             /* 開始ボタン */
-            <div className="text-center">
+            <div className="text-center flex flex-col gap-4">
               <button
                 onClick={handleStartQuiz}
                 disabled={loading}
@@ -264,6 +282,12 @@ export default function QuizPage() {
               >
                 {loading ? '読み込み中...' : 'クイズを開始'}
               </button>
+              <Link
+                href="/collection"
+                className="text-blue-600 hover:underline font-bold"
+              >
+                コレクションを見る
+              </Link>
             </div>
           )}
 

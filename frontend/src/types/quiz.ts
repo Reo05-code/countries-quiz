@@ -15,6 +15,7 @@ export interface QuizCheckRequest {
 export interface QuizCheckResponse {
   correct: boolean
   correctAnswer: string
+  flagUrl?: string
 }
 
 // エラーレスポンスの型
